@@ -32,6 +32,18 @@ python3 manage.py migrate
 python3 manage.py runserver
 ```
 
+OR use docker to run both services (much easier)
+
+In root directory, make sure docker is open
+
+```bash
+docker-compose build
+docker-compose up
+```
+
+front end - http://localhost:3000
+back end - http://localhost:8000
+
 ## Tools Used
 
 Front end
@@ -54,6 +66,8 @@ I first started creating the routes with Django; this was fairly straighforward 
 I then started working on the Next.js app set up. Having the built in routing system was very helpful instead of having to use React router so I decided to create a dashboard page and the 4 charts in their own directories. On each page I grabbed the data using the fetch API and used the data to populate the charts. I later configured the pages to all use a custom Chart component I created to simplify the code duplication with fetching.
 
 With charting, I first started using Chart.js which worked but it was difficult to get a working candlestick chart (it wasn't built in but they had a working chart here (https://github.com/chartjs/chartjs-chart-financial/tree/master/docs), but relatively new so there weren't any docs on how to get started). I ended up switching over to echarts which had a lot of documentation (very helpful) and a built in candlestick type which worked!
+
+Docker was also really fun to implement, I never created one for a full stack project before but using tutorials and documentation helped
 
 
 
