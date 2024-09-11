@@ -2,11 +2,13 @@ Visualization App built with Next.js and Django
 
 ## How to run
 
-First clone the repo and navigate to root directory
+First clone the repo and navigate to root directory (/chart-app)
 
 Make sure to run both the front end and back end at the same time
 
-To run the front end
+To run the front end (root directory)
+
+/chart-app
 
 ```bash
 npm install
@@ -14,7 +16,9 @@ npm install
 npm run dev
 ```
 
-To run the backend
+To run the backend (api directory)
+
+/chart-app/api
 
 ```bash
 python3 -m venv venv
@@ -22,6 +26,8 @@ python3 -m venv venv
 source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
 
 pip install -r requirements.txt
+
+python3 manage.py migrate
 
 python3 manage.py runserver
 ```
