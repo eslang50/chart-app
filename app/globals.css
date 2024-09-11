@@ -25,3 +25,20 @@ body {
     text-wrap: balance;
   }
 }
+
+.background {
+  background-image: url('/graphPicture.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100vh; /* Full viewport height */
+  width: 100vw;  /* Full viewport width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;  /* Optional: Adjust text color for contrast */
+}
+
+.content {
+  text-align: center;
+}
+
