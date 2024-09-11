@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Visualization App built with Next.js and Django
 
-## Getting Started
+## How to run
 
-First, run the development server:
+First clone the repo and navigate to root directory
+
+Make sure to run both the front end and back end at the same time
+
+To run the front end
 
 ```bash
+npm install
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To run the backend
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+python3 -m venv venv
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
 
-## Learn More
+pip install -r requirements.txt
 
-To learn more about Next.js, take a look at the following resources:
+python3 manage.py runserver
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tools Used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Front end
+- React
+- Next.js
+- Tailwind
+- Typescript
+- echarts 
 
-## Deploy on Vercel
+Back end
+- Python
+- Django
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Thoughts and process
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This was a really fun project/task to work on! I wasn't too familiar with Next.js or Django but had a good understanding of React and using Express routes for APIs so it was easy to pick up through tutorials and the documentation
+
+I first started creating the routes with Django; this was fairly straighforward with setting of the GET routes with the urls and data that were given in the instructions. 
+
+I then started working on the Next.js app set up. Having the built in routing system was very helpful instead of having to use React router so I decided to create a dashboard page and the 4 charts in their own directories. On each page I grabbed the data using the fetch API and used the data to populate the charts. I later configured the pages to all use a custom Chart component I created to simplify the code duplication with fetching.
+
+With charting, I first started using Chart.js which worked but it was difficult to get a working candlestick chart (it wasn't built in but they had a working chart here (https://github.com/chartjs/chartjs-chart-financial/tree/master/docs), but relatively new so there weren't any docs on how to get started). I ended up switching over to echarts which had a lot of documentation (very helpful) and a built in candlestick type which worked!
+
+
+
+
+
