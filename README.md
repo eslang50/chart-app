@@ -4,7 +4,7 @@ Visualization App built with Next.js and Django
 
 First clone the repo and navigate to root directory (/chart-app)
 
-Make sure to run both the front end and back end at the same time
+Make sure to have at least Node 18 and Python 3.10
 
 To run the front end (root directory)
 
