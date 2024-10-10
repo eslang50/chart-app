@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import Spinner from "@/app/components/Spinner";
+import { useSelectedSymbol } from "../SelectedSymbolContext";
 
 interface ChartProps {
   chartType: "line" | "candlestick" | "pie" | "bar";
@@ -11,7 +12,7 @@ interface ChartProps {
 }
 
 interface IChart {
-  labels: Array<string>; // Used for bar chart labels
+  labels: Array<string>;
   data: {
     revenue: Array<number>;
     gross_profit: Array<number>;
@@ -21,7 +22,7 @@ interface IChart {
 }
 
 interface ICandle {
-  date: string;  // Date of the candlestick
+  date: string;
   open: number;
   close: number;
   low: number;
@@ -35,14 +36,29 @@ const timePeriods = [
   { label: "Y", value: "1y" },
 ];
 
-export default function Chart(chartProps: ChartProps) {
+const formatNumber = (value: number) => {
+  if (value >= 1) return value.toFixed(1) + "B"; // Billions
+  if (value >= 1e-3) return (value * 1e3).toFixed(1) + "M"; // Millions (1B = 1000M)
+  if (value >= 1e-6) return (value * 1e6).toFixed(1) + "K"; // Thousands (1M = 1000K)
+  return value.toFixed(2); // Format as a decimal for values below 1,000
+};
+
+export default function Chart({ chartType, apiEndpoint, title }: ChartProps) {
+  const { selectedSymbol } = useSelectedSymbol();
   const [chartData, setChartData] = useState<IChart | null>(null);
-  const [selectedPeriod, setSelectedPeriod] = useState<string>("1d"); // Default period
-  
+  const [selectedPeriod, setSelectedPeriod] = useState<string>("1d");
+
+  console.log("Current selected symbol:", selectedSymbol);
+
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(`${chartProps.apiEndpoint}?period=${selectedPeriod}`);
+        const url =
+          chartType === "bar"
+            ? `${apiEndpoint}?symbol=${selectedSymbol}`
+            : `${apiEndpoint}?symbol=${selectedSymbol}&period=${selectedPeriod}`;
+
+        const response = await fetch(url);
         const data = await response.json();
         setChartData(data);
       } catch (error) {
@@ -50,25 +66,25 @@ export default function Chart(chartProps: ChartProps) {
       }
     }
     fetchData();
-  }, [chartProps.apiEndpoint, selectedPeriod]);  // Re-fetch when period changes
+  }, [apiEndpoint, chartType, selectedPeriod, selectedSymbol]);
 
   if (!chartData) {
     return <Spinner />;
   }
 
   const generateOptions = () => {
-    switch (chartProps.chartType) {
+    switch (chartType) {
       case "candlestick":
-        const candleData: Array<[number, number, number, number]> = (chartData.data as unknown as ICandle[]).map((candle) => [
-          candle.open,
-          candle.close,
-          candle.low,
-          candle.high,
+        const candleData: Array<[number, number, number, number]> = (
+          chartData.data as unknown as ICandle[]
+        ).map((candle) => [
+          parseFloat(candle.open.toFixed(2)),
+          parseFloat(candle.close.toFixed(2)),
+          parseFloat(candle.low.toFixed(2)),
+          parseFloat(candle.high.toFixed(2)),
         ]);
+        const isHourlyData = selectedPeriod === "1d";
 
-        const isHourlyData = selectedPeriod === "1d"; 
-
-        
         return {
           title: {
             text: chartData.symbol,
@@ -78,13 +94,21 @@ export default function Chart(chartProps: ChartProps) {
             type: "category",
             data: (chartData.data as unknown as ICandle[]).map((d) => {
               const date = new Date(d.date);
-              return isHourlyData 
-                ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
-                : date.toISOString().split('T')[0];  
-            }),        
+              return isHourlyData
+                ? date.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : date.toISOString().split("T")[0];
+            }),
             scale: true,
           },
-          yAxis: { scale: true },
+          yAxis: {
+            scale: true,
+            axisLabel: {
+              formatter: formatNumber,
+            },
+          },
           series: [{ type: "candlestick", data: candleData }],
         };
 
@@ -100,11 +124,24 @@ export default function Chart(chartProps: ChartProps) {
             data: chartData.labels,
             inverse: true,
           },
-          yAxis: { type: "value" },
+          yAxis: {
+            type: "value",
+            axisLabel: {
+              formatter: formatNumber, // Use the formatNumber function
+            },
+          },
           series: [
             { name: "Revenue", type: "bar", data: chartData.data.revenue },
-            { name: "Gross Profit", type: "bar", data: chartData.data.gross_profit },
-            { name: "Net Income", type: "bar", data: chartData.data.net_income },
+            {
+              name: "Gross Profit",
+              type: "bar",
+              data: chartData.data.gross_profit,
+            },
+            {
+              name: "Net Income",
+              type: "bar",
+              data: chartData.data.net_income,
+            },
           ],
         };
 
@@ -115,23 +152,27 @@ export default function Chart(chartProps: ChartProps) {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4 text-black">{chartProps.title}</h1>
+      <h1 className="text-2xl font-bold mb-4 text-black">{title}</h1>
       <ReactECharts
         option={generateOptions()}
         style={{ height: "400px", width: "100%" }}
       />
-      <div className="mb-4">
-        <ul
-          id="timePeriod"
-          className="p-2 flex gap-4 justify-end mr-12"
-        >
-          {timePeriods.map((period) => (
-            <li key={period.value} value={period.value} className="hover:opacity-50 text-black cursor-pointer" onClick={() => setSelectedPeriod(period.value)}>
-              {period.label}
-            </li>
-          ))}
-        </ul>
-      </div>
+      {chartType === "candlestick" && (
+        <div className="mb-4">
+          <ul id="timePeriod" className="p-2 flex gap-4 justify-end mr-12">
+            {timePeriods.map((period) => (
+              <li
+                key={period.value}
+                value={period.value}
+                className="hover:opacity-50 text-black cursor-pointer"
+                onClick={() => setSelectedPeriod(period.value)}
+              >
+                {period.label}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

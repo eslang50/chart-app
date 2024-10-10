@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SearchBar from "../components/SearchBar";
+import React from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -16,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </Link>
         <nav>
           <ul className="flex md:flex-col justify-between md:gap-4">
-            <li >
+            <li>
               <Link
                 href="/dashboard/candlestickChart"
                 className="hover:underline text-white "
@@ -24,14 +26,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 Price Action
               </Link>
             </li>
-            {/* <li className="mb-2">
-              <Link
-                href="/dashboard/lineChart"
-                className="hover:underline text-white"
-              >
-                Line Chart
-              </Link>
-            </li> */}
             <li className="mb-2">
               <Link
                 href="/dashboard/barChart"
@@ -40,18 +34,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 Financial Performance
               </Link>
             </li>
-            {/* <li>
-              <Link
-                href="/dashboard/pieChart"
-                className="hover:underline text-white"
-              >
-                Pie Chart
-              </Link>
-            </li> */}
           </ul>
         </nav>
       </aside>
       <div className={`flex-grow ${isDashboardPage ? "p-0" : "p-6 md:p-12"}`}>
+        <header className="w-full flex justify-center py-4">
+          <SearchBar />
+        </header>
         {children}
       </div>
     </div>

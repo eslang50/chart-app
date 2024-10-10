@@ -132,3 +132,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Load the API key from the .env file
 ALPHA_VANTAGE_API_KEY = config('ALPHA_VANTAGE_API_KEY')
 
+FINNHUB_API_KEY = config("FINNHUB_API_KEY")
+
