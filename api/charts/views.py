@@ -1,50 +1,62 @@
 from django.shortcuts import render
-
+from django.conf import settings
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+import yfinance as yf
 
-# Candlestick Data
+# Candle stick data for ticker
 @api_view(['GET'])
 def candlestick_data(request):
-    data = {
-        "data": [
-            {"date": "2023-01-01", "open": 30, "high": 35, "low": 28, "close": 32},
-            {"date": "2023-01-02", "open": 32, "high": 37, "low": 30, "close": 35},
-            {"date": "2023-01-03", "open": 35, "high": 38, "low": 33, "close": 34},
-            {"date": "2023-01-04", "open": 34, "high": 36, "low": 31, "close": 33},
-            {"date": "2023-01-05", "open": 33, "high": 39, "low": 32, "close": 37},
-            {"date": "2023-01-06", "open": 37, "high": 40, "low": 35, "close": 36},
-            {"date": "2023-01-07", "open": 36, "high": 38, "low": 34, "close": 35},
-            {"date": "2023-01-08", "open": 35, "high": 37, "low": 33, "close": 34},
-            {"date": "2023-01-09", "open": 34, "high": 36, "low": 30, "close": 32},
-            {"date": "2023-01-10", "open": 32, "high": 35, "low": 31, "close": 33}
-        ]
-    }
-    return Response(data)
+    symbol = request.query_params.get('symbol', 'AAPL')
+    period = request.query_params.get('period', '1d')  # Default to 1 day
+    interval = '1h' if period == '1d' else '1d'  # Use 1-hour interval for 1-day period
 
-# Line Chart Data
-@api_view(['GET'])
-def line_chart_data(request):
-    data = {
-        "labels": ["Jan", "Feb", "Mar", "Apr"],
-        "data": [10, 20, 30, 40]
-    }
-    return Response(data)
+    # Fetch data based on the selected period
+    data = yf.download(symbol, period=period, interval=interval)
 
-# Bar Chart Data
+    if data.empty:
+        return Response({"error": "No data found for the given symbol."}, status=404)
+
+    candlestick_data = data[['Open', 'High', 'Low', 'Close']].reset_index()
+    candlestick_data.columns = ['date', 'open', 'high', 'low', 'close']
+    
+    # Remove the line that formats the date to only show the day
+    candlestick_data['date'] = candlestick_data['date'].astype(str)  # Retain full timestamp
+    
+    response_data = {
+        'data': candlestick_data.to_dict(orient='records'),
+        'symbol': symbol
+    }
+
+    return Response(response_data)
+
+
+
+# Bar chart data including profit, revenue, etc for ticker
 @api_view(['GET'])
 def bar_chart_data(request):
-    data = {
-        "labels": ["Product A", "Product B", "Product C"],
-        "data": [100, 150, 200]
+    symbol = request.query_params.get('symbol', 'AAPL')
+    
+    # Fetch financial data
+    stock = yf.Ticker(symbol)
+    financials = stock.financials
+    
+    if financials.empty:
+        return Response({"error": "No financial data found for the given symbol."}, status=404)
+    
+    years = [str(year)[:4] for year in financials.columns.tolist()] 
+    revenue = financials.loc['Total Revenue'].tolist()
+    gross_profit = financials.loc['Gross Profit'].tolist()
+    net_income = financials.loc['Net Income'].tolist()
+    
+    chart_data = {
+        "labels": years,  # X-axis labels (years)
+        "data": {
+            "revenue": revenue,
+            "gross_profit": gross_profit,
+            "net_income": net_income,
+        },
+        "symbol" : symbol
     }
-    return Response(data)
-
-# Pie Chart Data
-@api_view(['GET'])
-def pie_chart_data(request):
-    data = {
-        "labels": ["Red", "Blue", "Yellow"],
-        "data": [300, 50, 100]
-    }
-    return Response(data)
+    
+    return Response(chart_data)

@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <aside className="w-full md:w-1/6 p-4 bg-gray-800 md:h-screen md:sticky md:top-0">
         <Link href="/dashboard">
           <h2 className="text-xl font-bold mb-4 text-white text-center md:text-left">
-            Charts Dashboard
+            Analysis Dashboard
           </h2>
         </Link>
         <nav>
@@ -21,33 +21,33 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 href="/dashboard/candlestickChart"
                 className="hover:underline text-white "
               >
-                Candlestick Chart
+                Price Action
               </Link>
             </li>
-            <li className="mb-2">
+            {/* <li className="mb-2">
               <Link
                 href="/dashboard/lineChart"
                 className="hover:underline text-white"
               >
                 Line Chart
               </Link>
-            </li>
+            </li> */}
             <li className="mb-2">
               <Link
                 href="/dashboard/barChart"
                 className="hover:underline text-white"
               >
-                Bar Chart
+                Financial Performance
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 href="/dashboard/pieChart"
                 className="hover:underline text-white"
               >
                 Pie Chart
               </Link>
-            </li>
+            </li> */}
           </ul>
         </nav>
       </aside>
