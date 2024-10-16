@@ -26,12 +26,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 Price Action
               </Link>
             </li>
-            <li className="mb-2">
+            <li>
               <Link
                 href="/dashboard/barChart"
                 className="hover:underline text-white"
               >
                 Financial Performance
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/dashboard/newsList"
+                className="hover:underline text-white"
+              >
+                Company News
               </Link>
             </li>
           </ul>

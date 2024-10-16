@@ -105,9 +105,6 @@ export default function Chart({ chartType, apiEndpoint, title }: ChartProps) {
           },
           yAxis: {
             scale: true,
-            axisLabel: {
-              formatter: formatNumber,
-            },
           },
           series: [{ type: "candlestick", data: candleData }],
         };

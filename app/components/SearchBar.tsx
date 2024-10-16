@@ -48,7 +48,7 @@ export default function SearchBar() {
         `http://localhost:8000/api/search/?q=${searchTerm}&exchange=US`
       );
       const data = await response.json();
-      setSuggestions(data.result.slice(0, 10) || []);
+      setSuggestions(data.slice(0, 10) || []);
     } catch (error) {
       console.error("Error fetching stock suggestions:", error);
     }

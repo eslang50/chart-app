@@ -10,19 +10,28 @@ finnhub_client = finnhub.Client(api_key=settings.FINNHUB_API_KEY)
 # Symbol Lookup API using Finnhub
 @api_view(['GET'])
 def symbol_lookup(request):
-    query = request.query_params.get('q', None)
+    symbol = request.query_params.get('q', None)
+    exchange = 'US'
 
-    if not query:
-        return Response({"error": "Query parameter 'q' is required."}, status=400)
+    if not symbol:
+        return Response({"error": "Query parameter 'q' (symbol) is required."}, status=400)
 
     try:
-        result = finnhub_client.symbol_lookup(query)
-        if not result or result['count'] == 0:
-            return Response({"error": "No symbols found for the given query."}, status=404)
+        result = finnhub_client.stock_symbols(exchange=exchange)
 
-        return Response(result)
+        filtered_symbols = [
+            s for s in result 
+            if symbol.upper() in s['displaySymbol'].upper() or symbol.upper() in s['description'].upper()
+        ]
+
+        if not filtered_symbols:
+            return Response({"error": f"No symbols found for '{symbol}' in the US exchange."}, status=404)
+
+        return Response(filtered_symbols)
+    
     except Exception as e:
-        return Response({"error": str(e)}, status=500)
+        return Response({"error": f"An error occurred: {str(e)}"}, status=500)
+
 
 
 # Candle stick data for ticker
@@ -83,3 +92,17 @@ def bar_chart_data(request):
     
     return Response(chart_data)
 
+@api_view(['GET'])
+def company_news(request):
+    symbol = request.query_params.get('symbol', None)
+    from_date = request.query_params.get('from', None)
+    to_date = request.query_params.get('to', None)
+
+    if not symbol or not from_date or not to_date:
+        return Response({"error": "Parameters 'symbol', 'from', and 'to' are required."}, status=400)
+
+    try:
+        news = finnhub_client.company_news(symbol, _from=from_date, to=to_date)
+        return Response(news)
+    except Exception as e:
+        return Response({"error": f"An error occurred: {str(e)}"}, status=500)

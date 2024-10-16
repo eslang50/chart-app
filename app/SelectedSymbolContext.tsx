@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface SelectedSymbolContextType {
@@ -6,13 +6,21 @@ interface SelectedSymbolContextType {
   setSelectedSymbol: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SelectedSymbolContext = createContext<SelectedSymbolContextType | undefined>(undefined);
+const SelectedSymbolContext = createContext<
+  SelectedSymbolContextType | undefined
+>(undefined);
 
-export const SelectedSymbolProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedSymbol, setSelectedSymbol] = useState("AAPL"); // Default value
+export const SelectedSymbolProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
+  const [selectedSymbol, setSelectedSymbol] = useState("AAPL"); // Default value  
 
   return (
-    <SelectedSymbolContext.Provider value={{ selectedSymbol, setSelectedSymbol }}>
+    <SelectedSymbolContext.Provider
+      value={{ selectedSymbol, setSelectedSymbol }}
+    >
       {children}
     </SelectedSymbolContext.Provider>
   );
@@ -21,7 +29,9 @@ export const SelectedSymbolProvider = ({ children }: { children: ReactNode }) =>
 export const useSelectedSymbol = () => {
   const context = useContext(SelectedSymbolContext);
   if (!context) {
-    throw new Error("useSelectedSymbol must be used within a SelectedSymbolProvider");
+    throw new Error(
+      "useSelectedSymbol must be used within a SelectedSymbolProvider"
+    );
   }
   return context;
 };
