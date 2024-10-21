@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <aside className="w-full md:w-1/6 p-4 bg-gray-800 md:h-screen md:sticky md:top-0">
         <Link href="/dashboard">
           <h2 className="text-xl font-bold mb-4 text-white text-center md:text-left">
-            Analysis Dashboard
+            StockSnap
           </h2>
         </Link>
         <nav>

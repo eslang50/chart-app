@@ -6,7 +6,6 @@ export default function Page() {
       <Chart
         chartType="bar"
         apiEndpoint="http://localhost:8000/api/bar-chart-data/"
-        title="Financial Performance Overview"
       />
     </div>
   );

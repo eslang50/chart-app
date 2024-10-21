@@ -22,7 +22,7 @@ export default function Page() {
     const fetchNews = async () => {
       try {
         const fromDate = new Date();
-        fromDate.setDate(fromDate.getDate() - 1);
+        fromDate.setDate(fromDate.getDate() - 7);
 
         const formattedFromDate = fromDate.toISOString().split("T")[0];
         const today = new Date().toISOString().split("T")[0];
@@ -71,20 +71,20 @@ export default function Page() {
                 href={article.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col md:flex-row bg-white rounded-lg shadow-md p-4 max-w-[1000px] mx-auto" 
+                className="flex flex-col md:flex-row bg-white rounded-lg shadow-md p-4 max-w-[1000px] mx-auto h-[200px]" // Set a fixed height for the article container
               >
                 {article.image && (
                   <div className="md:w-1/3 w-full">
                     <Image
                       src={article.image}
                       width={600}
-                      height={250}
+                      height={200} // Maintain the height
                       alt="News article image"
-                      className="rounded-lg"
+                      className="rounded-lg object-cover h-full" // Use object-cover to maintain aspect ratio
                     />
                   </div>
                 )}
-                <div className="md:w-2/3 w-full md:pl-4 mt-4 md:mt-0">
+                <div className="md:w-2/3 w-full md:pl-4 mt-4 md:mt-0 overflow-hidden">
                   <h3 className="font-semibold text-lg text-blue-600 hover:text-blue-800">
                     {article.headline}
                   </h3>
