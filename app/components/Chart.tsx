@@ -79,6 +79,7 @@ export default function Chart({ chartType, apiEndpoint }: ChartProps) {
   }
 
   const generateOptions = () => {
+    console.log(chartData.data)
     switch (chartType) {
       case "candlestick":
         const candleData: Array<[number, number, number, number]> = (
@@ -254,7 +255,6 @@ export default function Chart({ chartType, apiEndpoint }: ChartProps) {
             {selectedSymbol}
           </h2>
           <div className="flex justify-end mb-4">
-            <label className="mr-2">Financial Period:</label>
             <select
               className="border border-gray-300 rounded p-2 text-black"
               value={financialPeriod}

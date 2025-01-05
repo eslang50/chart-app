@@ -5,7 +5,7 @@ export default function Page() {
     process.env.NEXT_PUBLIC_API_URL
       ? process.env.NEXT_PUBLIC_API_URL
       : "https://stocksnap-backend.onrender.com/api"
-  }/bar-chart-data/`;
+  }/candlestick-data/`;
   return (
     <div>
       <Chart chartType="candlestick" apiEndpoint={apiEndpoint} />
