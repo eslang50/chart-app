@@ -27,7 +27,11 @@ export default function Page() {
         const formattedFromDate = fromDate.toISOString().split("T")[0];
         const today = new Date().toISOString().split("T")[0];
 
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/company-news/?symbol=${selectedSymbol}&from=${formattedFromDate}&to=${today}`;
+        const url = `${
+          process.env.NEXT_PUBLIC_API_URL
+            ? process.env.NEXT_PUBLIC_API_URL
+            : "https://stocksnap-backend.onrender.com/api"
+        }/company-news/?symbol=${selectedSymbol}&from=${formattedFromDate}&to=${today}`;
 
         const response = await fetch(url);
 
