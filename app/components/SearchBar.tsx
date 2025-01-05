@@ -86,7 +86,7 @@ export default function SearchBar() {
         onChange={handleInputChange}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
-        placeholder="Search for a stock symbol..."
+        placeholder="Search for a stock symbol or ticker..."
         className="w-full p-2 border border-gray-300 rounded"
       />
 

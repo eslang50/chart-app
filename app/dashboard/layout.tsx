@@ -20,7 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <ul className="flex md:flex-col justify-between md:gap-4">
             <li>
               <Link
-                href="/dashboard/candlestickChart"
+                href="/dashboard/priceAction"
                 className="hover:underline text-white "
               >
                 Price Action
@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </li>
             <li>
               <Link
-                href="/dashboard/barChart"
+                href="/dashboard/financialPerformance"
                 className="hover:underline text-white"
               >
                 Financial Performance

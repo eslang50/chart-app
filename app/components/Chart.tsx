@@ -113,7 +113,18 @@ export default function Chart({ chartType, apiEndpoint }: ChartProps) {
             yAxis: {
               scale: true,
             },
-            series: [{ type: "candlestick", data: candleData }],
+            series: [
+              {
+                type: "candlestick",
+                data: candleData,
+                itemStyle: {
+                  color: "#26a69a",
+                  color0: "#ef5350",
+                  borderColor: "#1b5e20",
+                  borderColor0: "#b71c1c",
+                },
+              },
+            ],
           },
         ];
 
