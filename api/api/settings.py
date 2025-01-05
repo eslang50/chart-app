@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-0rh3kcce9b0aq1%+_q#%6^75+b%bs07c(=#inh4u-tm+i1unpf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['stocksnap-backend.onrender.com']
+ALLOWED_HOSTS = ['stocksnap-backend.onrender.com', 'localhost']
 
 
 # Application definition
