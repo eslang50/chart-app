@@ -45,7 +45,7 @@ export default function SearchBar() {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:8000/api/search/?q=${searchTerm}&exchange=US`
+        `${process.env.NEXT_PUBLIC_API_URL}/search/?q=${searchTerm}&exchange=US`
       );
       const data = await response.json();
       setSuggestions(data.slice(0, 10) || []);
