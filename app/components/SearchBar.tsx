@@ -44,6 +44,7 @@ export default function SearchBar() {
   const fetchSuggestions = async (searchTerm: string) => {
     setIsLoading(true);
     try {
+      console.log(process.env.NEXT_PUBLIC_API_URL);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/search/?q=${searchTerm}&exchange=US`
       );
@@ -60,8 +61,8 @@ export default function SearchBar() {
   };
 
   const handleSuggestionClick = (symbol: string) => {
-    setQuery(symbol); 
-    setSuggestions([]); 
+    setQuery(symbol);
+    setSuggestions([]);
     setSelectedSymbol(symbol);
   };
 
@@ -73,12 +74,15 @@ export default function SearchBar() {
 
   const handleInputBlur = () => {
     setTimeout(() => {
-      setSuggestions([]); 
+      setSuggestions([]);
     }, 100);
   };
 
   return (
-    <div ref={dropdownRef} className="relative w-full max-w-md mx-auto text-black">
+    <div
+      ref={dropdownRef}
+      className="relative w-full max-w-md mx-auto text-black"
+    >
       <input
         ref={inputRef}
         type="text"
