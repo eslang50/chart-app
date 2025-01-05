@@ -44,9 +44,12 @@ export default function SearchBar() {
   const fetchSuggestions = async (searchTerm: string) => {
     setIsLoading(true);
     try {
-      console.log(process.env.NEXT_PUBLIC_API_URL);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/search/?q=${searchTerm}&exchange=US`
+        `${
+          process.env.NEXT_PUBLIC_API_URL
+            ? process.env.NEXT_PUBLIC_API_URL
+            : "https://stocksnap-backend.onrender.com/api"
+        }/search/?q=${searchTerm}&exchange=US`
       );
       const data = await response.json();
       setSuggestions(data.slice(0, 10) || []);
